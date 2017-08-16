@@ -6,12 +6,12 @@ CFLAGS:=-c -Wall -I$(ROOT)/include -I$(ROOT)/common -I.
 
 LDFLAGS:=-L$(ROOT)/lib -L$(ROOT)/common -lOpenCL -lCommon
 
-SOURCES:=example1.cpp
+SOURCES:=queuing.cpp
 HEADERS:=$(ROOT)/common/common.h $(ROOT)/common/image.h
 
 OBJECTS:=$(SOURCES:.cpp=.o)
 
-EXECUTABLE:=example1
+EXECUTABLE:=queuing
 
 all: $(EXECUTABLE)
 
