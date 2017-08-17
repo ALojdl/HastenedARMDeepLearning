@@ -113,6 +113,7 @@ __kernel void matrix_multiply_less_loads(   const int M,
     }
 }
 // --------------------------------------------------------------------------------------------
+// NOTE: Still work in progress!!! We should transpose second input matrix.
 __kernel void matrix_multiply_vector(   const int M,
                                         const int N,
                                         const int K,
@@ -143,7 +144,7 @@ __kernel void matrix_multiply_vector(   const int M,
         
         for (int k = 0; k < TS; k++)
         {
-            acc += Asub[k][row] * Bsub[col][k]; // ovde bi trebalo pre nego sto ovo radim transponovati, meni bi trebalo rezultat da je ok
+            acc += Asub[k][row] * Bsub[col][k]; 
         }
         
         barrier(CLK_LOCAL_MEM_FENCE);     
