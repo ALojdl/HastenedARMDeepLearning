@@ -3,10 +3,10 @@ Goal of this project is to implement small OpenCL based framework for deep learn
 
 #### NOTE:
 To run examples you need following setup:
-Project
-    |
-    +-- [dlib]: https://github.com/davisking/dlib
-    |
-    +-- [Mali OpenCL SDK]: https://github.com/biotrump/Mali_OpenCL_SDK
-    |
-    +-- [HastenedARMDeepLearning]: https://github.com/ALojdl/HastenedARMDeepLearning
+Project  
+    |  
+    +-- [dlib]: https://github.com/davisking/dlib  
+    |  
+    +-- [Mali OpenCL SDK]: https://github.com/biotrump/Mali_OpenCL_SDK  
+    |  
+    +-- [HastenedARMDeepLearning]: https://github.com/ALojdl/HastenedARMDeepLearning  
