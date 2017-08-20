@@ -39,20 +39,6 @@ int main()
     matrix<double,0,1> y, l1, l1_error, l1_delta, l1_tmp;
     matrix<double,3,1> syn;
     
-    matrix<int,16,16> A, B, C;
-    
-    A = 2;
-        
-    B = 2;
-        
-    C = A * B;
-    A = B * C;
-    B = C * A;
-    
-    cout << "A: \n" << A << endl;
-    cout << "B: \n" << B << endl;
-    cout << "C: \n" << C << endl;
-    
     y.set_size(4);
     l1.set_size(4);
     l1_error.set_size(4);
@@ -73,10 +59,9 @@ int main()
 
     for (int i=0; i<3; i++)
         syn(i,1) = distribution(generator);
-
-    cout << "X: \n" << X << endl;
-    cout << "y: \n" << y << endl;
-    cout << "syn: \n" << syn << endl;
+        
+    cout << syn;
+   
 
     for (int i=0; i<60000; i++)
     {
@@ -103,3 +88,4 @@ int main()
     cout << "l1: \n" << l1 << endl;
 
 }
+
