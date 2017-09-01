@@ -75,11 +75,11 @@ Operations needed:
         - L1_e = maxpool_error(L2_e, L2_y)
         - L1_g = sigmoid_gradient(L1_a)
         - L1_d = pointwise_multiply(L1_e, L1_g)
-        L1_dsyn = back_convolution6(L1_d, image)
+        - L1_dsyn = back_convolution6(L1_d, image)
 */
 
-#define TEST_IND 41
-#define NUMBER_OF_OPERATIONS 14
+#define TEST_IND 17
+#define NUMBER_OF_OPERATIONS 15
 #define SIZE 10
 
 int main(void)
@@ -96,7 +96,7 @@ int main(void)
     cl_int errorNumber;
     string kernel_names[] = {"convolution", "sigmoid", "maxpool", "convolution16", "matrix_multiply", "matrix_subtract", 
         "sigmoid_derivative", "matrix_point_multiply", "matrix_transpose_multiply", "matrix_multiply_transpose", 
-        "maxpool_error", "back_convolution16", "deconvolution16", "back_convolution"};
+        "maxpool_error", "back_convolution16", "deconvolution16", "back_convolution", "matrix_add"};
     
     size_t firstRows, firstCols, secondRows, secondCols, numFilters, filterSize;   
     size_t globalWorksize2[2];
@@ -1232,6 +1232,141 @@ int main(void)
     if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[13], 3, NULL, globalWorksize3, localWorksize3, 0, NULL, &event)))
     {
         cleanUpOpenCL(context, commandQueue, program, kernels[13], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    /* L1_syn = matrix_add(L1_syn, L1_dsyn) */
+    firstRows = 5;
+    firstCols = 30;
+     
+    globalWorksize2[0] = firstRows;
+    globalWorksize2[1] = firstCols;
+    
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 0, sizeof(int), (void*)&firstRows));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 1, sizeof(int), (void*)&firstCols));       
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 2, sizeof(cl_mem), (void*)&memoryObjects[1]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 3, sizeof(cl_mem), (void*)&memoryObjects[42]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 4, sizeof(cl_mem), (void*)&memoryObjects[1]));   
+   
+    if (!setKernelArgumentsSuccess)
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed setting OpenCL kernel arguments. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[14], 2, NULL, globalWorksize2, localWorksize2, 0, NULL, &event)))
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    /* L3_syn = matrix_add(L3_syn, L3_dsyn) */
+    firstRows = 5;
+    firstCols = 80;
+     
+    globalWorksize2[0] = firstRows;
+    globalWorksize2[1] = firstCols;
+    
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 0, sizeof(int), (void*)&firstRows));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 1, sizeof(int), (void*)&firstCols));       
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 2, sizeof(cl_mem), (void*)&memoryObjects[6]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 3, sizeof(cl_mem), (void*)&memoryObjects[37]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 4, sizeof(cl_mem), (void*)&memoryObjects[6]));   
+   
+    if (!setKernelArgumentsSuccess)
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed setting OpenCL kernel arguments. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[14], 2, NULL, globalWorksize2, localWorksize2, 0, NULL, &event)))
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }    
+    
+    /* L5_syn = matrix_add(L5_syn, L5_dsyn) */
+    firstRows = 400;
+    firstCols = 120;
+     
+    globalWorksize2[0] = firstRows;
+    globalWorksize2[1] = firstCols;
+    
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 0, sizeof(int), (void*)&firstRows));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 1, sizeof(int), (void*)&firstCols));       
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 2, sizeof(cl_mem), (void*)&memoryObjects[11]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 3, sizeof(cl_mem), (void*)&memoryObjects[32]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 4, sizeof(cl_mem), (void*)&memoryObjects[11]));   
+   
+    if (!setKernelArgumentsSuccess)
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed setting OpenCL kernel arguments. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[14], 2, NULL, globalWorksize2, localWorksize2, 0, NULL, &event)))
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }    
+    
+    /* L6_syn = matrix_add(L6_syn, L6_dsyn) */
+    firstRows = 120;
+    firstCols = 84;
+     
+    globalWorksize2[0] = firstRows;
+    globalWorksize2[1] = firstCols;
+    
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 0, sizeof(int), (void*)&firstRows));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 1, sizeof(int), (void*)&firstCols));       
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 2, sizeof(cl_mem), (void*)&memoryObjects[14]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 3, sizeof(cl_mem), (void*)&memoryObjects[28]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 4, sizeof(cl_mem), (void*)&memoryObjects[14]));   
+   
+    if (!setKernelArgumentsSuccess)
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed setting OpenCL kernel arguments. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[14], 2, NULL, globalWorksize2, localWorksize2, 0, NULL, &event)))
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }    
+    
+    /* L7_syn = matrix_add(L7_syn, L7_dsyn) */
+    firstRows = 84;
+    firstCols = 10;
+     
+    globalWorksize2[0] = firstRows;
+    globalWorksize2[1] = firstCols;
+    
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 0, sizeof(int), (void*)&firstRows));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 1, sizeof(int), (void*)&firstCols));       
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 2, sizeof(cl_mem), (void*)&memoryObjects[17]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 3, sizeof(cl_mem), (void*)&memoryObjects[24]));
+    setKernelArgumentsSuccess &= checkSuccess(clSetKernelArg(kernels[14], 4, sizeof(cl_mem), (void*)&memoryObjects[17]));   
+   
+    if (!setKernelArgumentsSuccess)
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
+        cerr << "Failed setting OpenCL kernel arguments. " << __FILE__ << ":"<< __LINE__ << endl;
+        return 1;
+    }
+    
+    if (!checkSuccess(clEnqueueNDRangeKernel(commandQueue, kernels[14], 2, NULL, globalWorksize2, localWorksize2, 0, NULL, &event)))
+    {
+        cleanUpOpenCL(context, commandQueue, program, kernels[14], memoryObjects, numberOfMemoryObjects);
         cerr << "Failed enqueuing the kernel. " << __FILE__ << ":"<< __LINE__ << endl;
         return 1;
     }

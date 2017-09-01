@@ -359,8 +359,8 @@ __kernel void matrix_multiply_transpose(const int firstRows,
 }
 
 
-__kernel void matrix_add(   const int M,
-                            const int N,
+__kernel void matrix_add(   const int rows,
+                            const int cols,
                             __global float* inA,
                             __global float* inB,
                             __global float* out)
@@ -368,30 +368,5 @@ __kernel void matrix_add(   const int M,
     const int globalRow = get_global_id(0);
     const int globalCol = get_global_id(1);
 
-    out[globalCol * M + globalRow] = inA[globalCol * M + globalRow] + inB[globalCol * M + globalRow];
-}
-
-
-__kernel void matrix_convolution(   const M,
-                                    const N,
-                                    const R,
-                                    const C,
-                                    __global float* in,
-                                    __global float* filter,
-                                    __global float* out)
-{
-    const int globalRow = get_global_id(0);
-    const int globalCol = get_global_id(1);
-    
-    double acc = 0;
-    
-    for (int r = 0; r < R; r++)
-    {
-        for (int c = 0; c < C; c++)
-        {
-            acc += in[(globalCol + c) * M + globalRow + r] * filter[c * M + r];
-        }
-    }
-    
-    out[globalCol * M + globalRow] = acc/(R*C);
+    out[globalCol * rows + globalRow] = inA[globalCol * rows + globalRow] + inB[globalCol * rows + globalRow];
 }
